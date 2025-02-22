@@ -22,6 +22,6 @@ using LightGBM::ChunkedArray;
  * for larger integral types
  * so we won't support that for now:
  */
-//%template(int64ChunkedArray) ChunkedArray<int64_t>;
+// %template(int64ChunkedArray) ChunkedArray<int64_t>;
 %template(floatChunkedArray) ChunkedArray<float>;
 %template(doubleChunkedArray) ChunkedArray<double>;

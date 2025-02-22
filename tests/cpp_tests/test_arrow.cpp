@@ -151,30 +151,15 @@ class ArrowChunkedArrayTest : public testing::Test {
 
   /* ------------------------------------- SCHEMA CREATION ------------------------------------- */
 
-  template <typename T>
+  template <class T>
   ArrowSchema create_primitive_schema() {
-    std::logic_error("not implemented");
-  }
-
-  template <>
-  ArrowSchema create_primitive_schema<float>() {
     ArrowSchema schema;
-    schema.format = "f";
-    schema.name = nullptr;
-    schema.metadata = nullptr;
-    schema.flags = 0;
-    schema.n_children = 0;
-    schema.children = nullptr;
-    schema.dictionary = nullptr;
-    schema.release = nullptr;
-    schema.private_data = nullptr;
-    return schema;
-  }
-
-  template <>
-  ArrowSchema create_primitive_schema<bool>() {
-    ArrowSchema schema;
-    schema.format = "b";
+    if(std::is_same<float,T>::value) 
+      schema.format = "f";
+    else if(std::is_same<bool,T>::value)
+      schema.format = "b";
+    else 
+      std::logic_error("not implemented");
     schema.name = nullptr;
     schema.metadata = nullptr;
     schema.flags = 0;

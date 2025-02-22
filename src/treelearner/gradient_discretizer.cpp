@@ -23,13 +23,13 @@ void GradientDiscretizer::Init(
   random_values_use_start_dist_ = std::uniform_int_distribution<data_size_t>(0, num_data);
 
   const int num_threads = OMP_NUM_THREADS();
-  int num_blocks = 0;
+  data_size_t num_blocks = 0;
   data_size_t block_size = 0;
   Threading::BlockInfo<data_size_t>(num_data, 512, &num_blocks, &block_size);
   #pragma omp parallel for schedule(static, 1) num_threads(num_threads)
-  for (int thread_id = 0; thread_id < num_blocks; ++thread_id) {
+  for (data_size_t thread_id = 0; thread_id < num_blocks; ++thread_id) {
     const data_size_t start = thread_id * block_size;
-    const data_size_t end = std::min(start + block_size, num_data);
+    const data_size_t end = std::min<data_size_t>(start + block_size, num_data);
     std::mt19937 gradient_random_values_eng(random_seed_ + thread_id);
     std::uniform_real_distribution<double> gradient_random_values_dist(0.0f, 1.0f);
     std::mt19937 hessian_random_values_eng(random_seed_ + thread_id + num_threads);

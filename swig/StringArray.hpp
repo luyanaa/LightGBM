@@ -138,3 +138,4 @@ class StringArray {
 };
 
 #endif  // LIGHTGBM_SWIG_STRING_ARRAY_H_
+

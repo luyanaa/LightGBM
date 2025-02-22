@@ -948,7 +948,7 @@ bool Dataset::SetDoubleField(const char* field_name, const double* field_data,
   return true;
 }
 
-bool Dataset::SetIntField(const char* field_name, const int* field_data,
+bool Dataset::SetIntField(const char* field_name, const data_size_t* field_data,
                           data_size_t num_element) {
   std::string name(field_name);
   name = Common::Trim(name);
@@ -1000,7 +1000,7 @@ bool Dataset::GetDoubleField(const char* field_name, data_size_t* out_len,
 }
 
 bool Dataset::GetIntField(const char* field_name, data_size_t* out_len,
-                          const int** out_ptr) {
+                          const data_size_t** out_ptr) {
   std::string name(field_name);
   name = Common::Trim(name);
   if (name == std::string("query") || name == std::string("group")) {

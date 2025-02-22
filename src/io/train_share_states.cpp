@@ -112,8 +112,8 @@ template void MultiValBinWrapper::HistMove<true, 32, 32>(const std::vector<hist_
 template <bool USE_QUANT_GRAD, int HIST_BITS, int INNER_HIST_BITS>
 void MultiValBinWrapper::HistMerge(std::vector<hist_t,
   Common::AlignmentAllocator<hist_t, kAlignedSize>>* hist_buf) {
-  int n_bin_block = 1;
-  int bin_block_size = num_bin_;
+  data_size_t n_bin_block = 1;
+  data_size_t bin_block_size = num_bin_;
   Threading::BlockInfo<data_size_t>(num_threads_, num_bin_, 512, &n_bin_block,
                                   &bin_block_size);
   if (USE_QUANT_GRAD) {
@@ -123,12 +123,12 @@ void MultiValBinWrapper::HistMerge(std::vector<hist_t,
         dst = reinterpret_cast<int64_t*>(hist_buf->data()) + hist_buf->size() / 2 - static_cast<size_t>(num_bin_aligned_);
       }
       #pragma omp parallel for schedule(static, 1) num_threads(num_threads_)
-      for (int t = 0; t < n_bin_block; ++t) {
-        const int start = t * bin_block_size;
-        const int end = std::min(start + bin_block_size, num_bin_);
-        for (int tid = 1; tid < n_data_block_; ++tid) {
+      for (data_size_t t = 0; t < n_bin_block; ++t) {
+        const data_size_t start = t * bin_block_size;
+        const data_size_t end = std::min<data_size_t>(start + bin_block_size, num_bin_);
+        for (data_size_t tid = 1; tid < n_data_block_; ++tid) {
           auto src_ptr = reinterpret_cast<const int64_t*>(hist_buf->data()) + static_cast<size_t>(num_bin_aligned_) * (tid - 1);
-          for (int i = start; i < end; ++i) {
+          for (data_size_t i = start; i < end; ++i) {
             dst[i] += src_ptr[i];
           }
         }
@@ -139,12 +139,12 @@ void MultiValBinWrapper::HistMerge(std::vector<hist_t,
         dst = reinterpret_cast<int32_t*>(hist_buf->data()) + hist_buf->size() / 2 - static_cast<size_t>(num_bin_aligned_);
       }
       #pragma omp parallel for schedule(static, 1) num_threads(num_threads_)
-      for (int t = 0; t < n_bin_block; ++t) {
-        const int start = t * bin_block_size;
-        const int end = std::min(start + bin_block_size, num_bin_);
-        for (int tid = 1; tid < n_data_block_; ++tid) {
+      for (data_size_t t = 0; t < n_bin_block; ++t) {
+        const data_size_t start = t * bin_block_size;
+        const data_size_t end = std::min<data_size_t>(start + bin_block_size, num_bin_);
+        for (data_size_t tid = 1; tid < n_data_block_; ++tid) {
           auto src_ptr = reinterpret_cast<const int32_t*>(hist_buf->data()) + static_cast<size_t>(num_bin_aligned_) * (tid - 1);
-          for (int i = start; i < end; ++i) {
+          for (data_size_t i = start; i < end; ++i) {
             dst[i] += src_ptr[i];
           }
         }
@@ -153,12 +153,12 @@ void MultiValBinWrapper::HistMerge(std::vector<hist_t,
       int32_t* dst = reinterpret_cast<int32_t*>(hist_buf->data()) + hist_buf->size() / 2;
       std::memset(reinterpret_cast<void*>(dst), 0, num_bin_ * kInt16HistBufferEntrySize);
       #pragma omp parallel for schedule(static, 1) num_threads(num_threads_)
-      for (int t = 0; t < n_bin_block; ++t) {
-        const int start = t * bin_block_size;
-        const int end = std::min(start + bin_block_size, num_bin_);
-        for (int tid = 0; tid < n_data_block_; ++tid) {
+      for (data_size_t t = 0; t < n_bin_block; ++t) {
+        const data_size_t start = t * bin_block_size;
+        const data_size_t end = std::min<data_size_t>(start + bin_block_size, num_bin_);
+        for (data_size_t tid = 0; tid < n_data_block_; ++tid) {
           auto src_ptr = reinterpret_cast<const int16_t*>(hist_buf->data()) + static_cast<size_t>(num_bin_aligned_) * tid;
-          for (int i = start; i < end; ++i) {
+          for (data_size_t i = start; i < end; ++i) {
             const int16_t packed_hist = src_ptr[i];
             const int32_t packed_hist_int32 = (static_cast<int32_t>(static_cast<int8_t>(packed_hist >> 8)) << 16) | static_cast<int32_t>(packed_hist & 0x00ff);
             dst[i] += packed_hist_int32;
@@ -172,12 +172,12 @@ void MultiValBinWrapper::HistMerge(std::vector<hist_t,
       dst = hist_buf->data() + hist_buf->size() - 2 * static_cast<size_t>(num_bin_aligned_);
     }
     #pragma omp parallel for schedule(static, 1) num_threads(num_threads_)
-    for (int t = 0; t < n_bin_block; ++t) {
-      const int start = t * bin_block_size;
-      const int end = std::min(start + bin_block_size, num_bin_);
-      for (int tid = 1; tid < n_data_block_; ++tid) {
+    for (data_size_t t = 0; t < n_bin_block; ++t) {
+      const data_size_t start = t * bin_block_size;
+      const data_size_t end = std::min<data_size_t>(start + bin_block_size, num_bin_);
+      for (data_size_t tid = 1; tid < n_data_block_; ++tid) {
         auto src_ptr = hist_buf->data() + static_cast<size_t>(num_bin_aligned_) * 2 * (tid - 1);
-        for (int i = start * 2; i < end * 2; ++i) {
+        for (data_size_t i = start * 2; i < end * 2; ++i) {
           dst[i] += src_ptr[i];
         }
       }

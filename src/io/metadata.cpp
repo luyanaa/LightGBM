@@ -760,7 +760,7 @@ void Metadata::InsertAt(data_size_t start_index,
   const float* labels,
   const float* weights,
   const double* init_scores,
-  const int32_t* queries) {
+  const data_size_t* queries) {
   if (num_data_ < count + start_index) {
     Log::Fatal("Length of metadata is too long to append #data");
   }

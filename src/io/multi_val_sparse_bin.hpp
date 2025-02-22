@@ -338,14 +338,14 @@ class MultiValSparseBin : public MultiValBin {
     if (SUBROW) {
       CHECK_EQ(num_data_, num_used_indices);
     }
-    int n_block = 1;
+    data_size_t n_block = 1;
     data_size_t block_size = num_data_;
     Threading::BlockInfo<data_size_t>(static_cast<int>(t_data_.size() + 1),
                                       num_data_, 1024, &n_block, &block_size);
     std::vector<INDEX_T> sizes(t_data_.size() + 1, 0);
     const int pre_alloc_size = 50;
 #pragma omp parallel for num_threads(OMP_NUM_THREADS()) schedule(static, 1)
-    for (int tid = 0; tid < n_block; ++tid) {
+    for (data_size_t tid = 0; tid < n_block; ++tid) {
       data_size_t start = tid * block_size;
       data_size_t end = std::min(num_data_, start + block_size);
       auto& buf = (tid == 0) ? data_ : t_data_[tid - 1];

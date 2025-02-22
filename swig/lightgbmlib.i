@@ -15,6 +15,11 @@
 #include "../include/LightGBM/c_api.h"
 %}
 
+typedef long int int64_t;
+typedef unsigned long int uint64_t;
+%apply long int  { int64_t };
+%apply unsigned long int { uint64_t };
+
 %include "various.i"
 %include "carrays.i"
 %include "cpointer.i"

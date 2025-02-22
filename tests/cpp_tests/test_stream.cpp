@@ -26,7 +26,7 @@ void test_stream_dense(
   const std::vector<float>* labels,
   const std::vector<float>* weights,
   const std::vector<double>* init_scores,
-  const std::vector<int32_t>* groups) {
+  const std::vector<int64_t>* groups) {
   Log::Info("Streaming %d rows dense data with a batch size of %d", nrows, batch_count);
   DatasetHandle dataset_handle = nullptr;
   Dataset* dataset = nullptr;
@@ -142,7 +142,7 @@ void test_stream_sparse(
   const std::vector<float>* labels,
   const std::vector<float>* weights,
   const std::vector<double>* init_scores,
-  const std::vector<int32_t>* groups) {
+  const std::vector<int64_t>* groups) {
   Log::Info("Streaming %d rows sparse data with a batch size of %d", nrows, batch_count);
   DatasetHandle dataset_handle = nullptr;
   Dataset* dataset = nullptr;
@@ -264,7 +264,7 @@ TEST(Stream, PushDenseRowsWithMetadata) {
   int nclasses = 2;  // choose > 1 just to test multi-class handling
   std::vector<double> unused_init_scores;
   unused_init_scores.resize(noriginalrows * nclasses);
-  std::vector<int32_t> unused_groups;
+  std::vector<int64_t> unused_groups;
   unused_groups.assign(noriginalrows, 1);
   result = LGBM_DatasetSetField(ref_dataset_handle, "init_score", unused_init_scores.data(), noriginalrows * nclasses, 1);
   EXPECT_EQ(0, result) << "LGBM_DatasetSetField init_score result code: " << result;
@@ -278,7 +278,7 @@ TEST(Stream, PushDenseRowsWithMetadata) {
   std::vector<float> labels;
   std::vector<float> weights;
   std::vector<double> init_scores;
-  std::vector<int32_t> groups;
+  std::vector<int64_t> groups;
 
   Log::Info("Creating random data");
   TestUtils::CreateRandomDenseData(nrows, ncols, nclasses, &features, &labels, &weights, &init_scores, &groups);
@@ -315,7 +315,7 @@ TEST(Stream, PushSparseRowsWithMetadata) {
   int32_t nclasses = 2;
   std::vector<double> unused_init_scores;
   unused_init_scores.resize(noriginalrows * nclasses);
-  std::vector<int32_t> unused_groups;
+  std::vector<int64_t> unused_groups;
   unused_groups.assign(noriginalrows, 1);
   result = LGBM_DatasetSetField(ref_dataset_handle, "init_score", unused_init_scores.data(), noriginalrows * nclasses, 1);
   EXPECT_EQ(0, result) << "LGBM_DatasetSetField init_score result code: " << result;
@@ -331,7 +331,7 @@ TEST(Stream, PushSparseRowsWithMetadata) {
   std::vector<float> labels;
   std::vector<float> weights;
   std::vector<double> init_scores;
-  std::vector<int32_t> groups;
+  std::vector<int64_t> groups;
 
   Log::Info("Creating random data");
   float sparse_percent = .1f;

@@ -245,7 +245,7 @@ LIGHTGBM_C_EXPORT int LGBM_DatasetPushRowsWithMetadata(DatasetHandle dataset,
                                                        const float* label,
                                                        const float* weight,
                                                        const double* init_score,
-                                                       const int32_t* query,
+                                                       const int64_t* query,
                                                        int32_t tid);
 
 /*!
@@ -303,7 +303,7 @@ LIGHTGBM_C_EXPORT int LGBM_DatasetPushRowsByCSRWithMetadata(DatasetHandle datase
                                                             const float* label,
                                                             const float* weight,
                                                             const double* init_score,
-                                                            const int32_t* query,
+                                                            const int64_t* query,
                                                             int32_t tid);
 
 /*!
@@ -465,7 +465,7 @@ LIGHTGBM_C_EXPORT int LGBM_DatasetCreateFromArrow(int64_t n_chunks,
  * \return 0 when succeed, -1 when failure happens
  */
 LIGHTGBM_C_EXPORT int LGBM_DatasetGetSubset(const DatasetHandle handle,
-                                            const int32_t* used_row_indices,
+                                            const int64_t * used_row_indices,
                                             int32_t num_used_row_indices,
                                             const char* parameters,
                                             DatasetHandle* out);
